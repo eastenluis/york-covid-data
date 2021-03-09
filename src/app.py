@@ -1,12 +1,25 @@
 import csv
-import sys
 import requests
 from collections import defaultdict
 from datetime import datetime
 
+from jinja2 import Template
 from pytz import timezone
 
 CASE_DATA_URL = "https://ww4.yorkmaps.ca/COVID19/Data/YR_CaseData.csv"
+
+def send_email_by_mailgun(message_date, message_content, recipients, email_domain, api_key):
+    date_str = message_date.strftime("%Y-%m-%d")
+    return requests.post(
+        f"https://api.mailgun.net/v3/{email_domain}/messages",
+        auth=("api", api_key),
+        data={
+            "from": f"Covid Newsletter <newsletter@{email_domain}>",
+            "to": recipients,
+            "subject": f"York Region Covid Update: {date_str}",
+            "html": message_content,
+        },
+    )
 
 
 def handler(event, context):
@@ -41,4 +54,30 @@ def handler(event, context):
         case_map_by_age_group[age_group] += 1
         case_map_by_municipality[municipality] += 1
 
-    print(case_map_by_municipality)
+    # Load Email Template
+    with open("template.html.j2") as template_file:
+        template = Template(template_file.read())
+
+    message = template.render(
+        news_date=today.strftime("%Y-%m-%d"),
+        municipalities=sorted(
+            case_map_by_municipality.items(),
+            key=lambda item: item[1],
+            reverse=True,
+        ),
+        age_groups=sorted(
+            case_map_by_age_group.items(), key=lambda item: item[0]
+        ),
+    )
+
+    response = send_email_by_mailgun(
+        message_date=today,
+        message_content=message,
+        email_domain=event["email_domain"],
+        api_key=event["api_key"],
+        recipients=event["recipients"],
+    )
+    return {
+        "status": response.status_code,
+        "message": response.text,
+    }
