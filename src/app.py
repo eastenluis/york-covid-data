@@ -32,6 +32,7 @@ def handler(event, context):
     next(reader)
 
     today = datetime.now(timezone("America/Toronto")).date()
+    total = 0
     case_map_by_age_group = defaultdict(int)
     case_map_by_municipality = defaultdict(int)
 
@@ -53,6 +54,7 @@ def handler(event, context):
 
         case_map_by_age_group[age_group] += 1
         case_map_by_municipality[municipality] += 1
+        total += 1
 
     # Load Email Template
     with open("template.html.j2") as template_file:
@@ -68,6 +70,7 @@ def handler(event, context):
         age_groups=sorted(
             case_map_by_age_group.items(), key=lambda item: item[0]
         ),
+        total=total,
     )
 
     response = send_email_by_mailgun(
