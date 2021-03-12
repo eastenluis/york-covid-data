@@ -1,4 +1,6 @@
+
 import csv
+import os
 import requests
 from collections import defaultdict
 from datetime import datetime
@@ -7,14 +9,16 @@ from jinja2 import Template
 from pytz import timezone
 
 CASE_DATA_URL = "https://ww4.yorkmaps.ca/COVID19/Data/YR_CaseData.csv"
+API_KEY = os.environ["MAILGUN_API_KEY"]
+EMAIL_DOMAIN = os.environ["MAILGUN_EMAIL_DOMAIN"]
 
-def send_email_by_mailgun(message_date, message_content, recipients, email_domain, api_key):
+def send_email_by_mailgun(message_date, message_content, recipients):
     date_str = message_date.strftime("%Y-%m-%d")
     return requests.post(
-        f"https://api.mailgun.net/v3/{email_domain}/messages",
-        auth=("api", api_key),
+        f"https://api.mailgun.net/v3/{EMAIL_DOMAIN}/messages",
+        auth=("api", API_KEY),
         data={
-            "from": f"Covid Newsletter <newsletter@{email_domain}>",
+            "from": f"Covid Newsletter <newsletter@{EMAIL_DOMAIN}>",
             "to": recipients,
             "subject": f"York Region Covid Update: {date_str}",
             "html": message_content,
@@ -76,8 +80,6 @@ def handler(event, context):
     response = send_email_by_mailgun(
         message_date=today,
         message_content=message,
-        email_domain=event["email_domain"],
-        api_key=event["api_key"],
         recipients=event["recipients"],
     )
     return {
