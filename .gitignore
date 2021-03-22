@@ -1,3 +1,7 @@
 .vscode
 .venv
 .env
+.terraform
+build.tfvars
+terraform.tfstate*
+.terraform.tfstate.lock.info
