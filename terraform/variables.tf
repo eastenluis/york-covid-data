@@ -18,3 +18,7 @@ variable "mailgun_domain" {
 variable "git_commit" {
   description = "Latest git commit hash of this repository"
 }
+
+variable "recipients_list" {
+  description = "A list of recipients that should receive the update"
+}

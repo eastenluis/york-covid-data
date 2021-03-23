@@ -21,7 +21,7 @@ resource "aws_lambda_function" "notifier" {
 
   image_uri    = "${aws_ecr_repository.repo.repository_url}:${var.git_commit}"
   package_type = "Image"
-  timeout = 90
+  timeout      = 90
   depends_on = [
     aws_ecr_repository.repo, null_resource.push_image_to_ecr
   ]
@@ -52,4 +52,23 @@ resource "aws_iam_role" "lambda_exec" {
 }
 EOF
 
+}
+
+resource "aws_cloudwatch_event_rule" "every_evening" {
+  name                = "every-evening"
+  description         = "Report York Region COVID news daily"
+  schedule_expression = "cron(0 22 * * ? *)"
+}
+
+resource "aws_cloudwatch_event_target" "report_daily" {
+  rule = aws_cloudwatch_event_rule.every_evening.name
+  arn  = aws_lambda_function.notifier.arn
+  input = jsonencode({"recipients": var.recipients_list})
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_call_daily_news" {
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.notifier.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.every_evening.arn
 }
