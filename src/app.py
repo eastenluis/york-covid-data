@@ -1,4 +1,3 @@
-
 import csv
 import os
 import requests
@@ -11,6 +10,7 @@ from pytz import timezone
 CASE_DATA_URL = "https://ww4.yorkmaps.ca/COVID19/Data/YR_CaseData.csv"
 API_KEY = os.environ["MAILGUN_API_KEY"]
 EMAIL_DOMAIN = os.environ["MAILGUN_EMAIL_DOMAIN"]
+
 
 def send_email_by_mailgun(message_date, message_content, recipients):
     date_str = message_date.strftime("%Y-%m-%d")
@@ -39,6 +39,7 @@ def handler(event, context):
     total = 0
     case_map_by_age_group = defaultdict(int)
     case_map_by_municipality = defaultdict(int)
+    case_map_by_status = defaultdict(int)
 
     for row in reader:
         age_group = row[2]
@@ -49,15 +50,12 @@ def handler(event, context):
             continue
         status = row[8]
 
-        # Filter out resolved/deceased case and cases reported > 2 days
-        if date_reported != today or status.lower() in [
-            "resolved",
-            "deceased",
-        ]:
+        # Filter out cases reported > 2 days
+        if date_reported != today:
             continue
-
         case_map_by_age_group[age_group] += 1
         case_map_by_municipality[municipality] += 1
+        case_map_by_status[status] += 1
         total += 1
 
     # Load Email Template
@@ -72,8 +70,12 @@ def handler(event, context):
             reverse=True,
         ),
         age_groups=sorted(
-            case_map_by_age_group.items(), key=lambda item: item[0]
+            case_map_by_age_group.items(),
+            key=lambda item: "00s"
+            if item[0].lower() == "under 20"
+            else item[0],
         ),
+        statuses=case_map_by_status.items(),
         total=total,
     )
 

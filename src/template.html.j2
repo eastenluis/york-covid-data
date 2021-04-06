@@ -366,20 +366,30 @@ table.data-table tr:last-child {
                 <p>{{total}} has been reported today in the York Region: </p>
                 <div>
                 <h2 style="text-align: center;">Municipalities</h2>
-	        	<table class="data-table" style="width:300px;">
+	        	<table class="data-table" style="width:300px;" width="300">
                     <tbody>
                     {% for key, value in municipalities %}
-                        <tr><td>{{key}}</td><td width="30px" align="center">{{value}}</td></tr>
+                        <tr><td width="270px">{{key}}</td><td width="30px" align="center">{{value}}</td></tr>
                     {% endfor %}
                     </tbody>
                 </table>
                 </div>
                 <div>
                 <h2 style="text-align: center;">Age Groups</h2>
-                <table class="data-table" style="width:300px;">
+                <table class="data-table" style="width:300px;" width="300">
                     <tbody>
                     {% for key, value in age_groups %}
-                        <tr><td>{{key}}</td><td width="30px" align="center">{{ value}}</td></tr>
+                        <tr><td width="270px">{{key}}</td><td width="30px" align="center">{{value}}</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+                <div>
+                <h2 style="text-align: center;">Statuses</h2>
+                <table class="data-table" style="width:300px;" width="300">
+                    <tbody>
+                    {% for key, value in statuses %}
+                        <tr><td> width="270px"{{key}}</td><td width="30px" align="center">{{value}}</td></tr>
                     {% endfor %}
                     </tbody>
                 </table>
