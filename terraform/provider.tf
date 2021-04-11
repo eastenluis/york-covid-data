@@ -5,6 +5,15 @@ terraform {
       version = "~> 3.27"
     }
   }
+
+  backend "remote" {
+      hostname = "app.terraform.io"
+      organization = "paperwhale"
+
+      workspaces {
+          name = "york-covid-notifier"
+      }
+  }
 }
 
 provider "aws" {
