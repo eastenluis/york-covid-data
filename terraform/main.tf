@@ -61,9 +61,9 @@ resource "aws_cloudwatch_event_rule" "every_evening" {
 }
 
 resource "aws_cloudwatch_event_target" "report_daily" {
-  rule = aws_cloudwatch_event_rule.every_evening.name
-  arn  = aws_lambda_function.notifier.arn
-  input = jsonencode({"recipients": var.recipients_list})
+  rule  = aws_cloudwatch_event_rule.every_evening.name
+  arn   = aws_lambda_function.notifier.arn
+  input = jsonencode({ "recipients" : var.recipients_list })
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_call_daily_news" {

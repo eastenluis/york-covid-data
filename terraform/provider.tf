@@ -7,12 +7,12 @@ terraform {
   }
 
   backend "remote" {
-      hostname = "app.terraform.io"
-      organization = "paperwhale"
+    hostname     = "app.terraform.io"
+    organization = "paperwhale"
 
-      workspaces {
-          name = "york-covid-notifier"
-      }
+    workspaces {
+      name = "york-covid-notifier"
+    }
   }
 }
 
