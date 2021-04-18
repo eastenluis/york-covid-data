@@ -45,7 +45,7 @@ jobs:
         -var "aws_region=${{ secrets.AWS_REGION }}"
         -var "mailgun_api_key=${{ secrets.MAILGUN_API_KEY }}"
         -var "mailgun_domain=${{ secrets.MAILGUN_DOMAIN }}"
-        -var "git_commit=${{ GITHUB_SHA }}"
+        -var "git_commit=${{ github.sha }}"
         -var "recipients_list=${{ RECIPIENTS_LIST }}"
 
 
