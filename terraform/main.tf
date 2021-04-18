@@ -10,7 +10,7 @@ resource "null_resource" "push_image_to_ecr" {
   }
 
   provisioner "local-exec" {
-    command     = "${path.module}/build.sh ${aws_ecr_repository.repo.repository_url} ${var.git_commit} ${var.aws_region} ${var.aws_profile}"
+    command     = "${path.module}/build.sh ${aws_ecr_repository.repo.repository_url} ${var.git_commit} ${var.aws_region}"
     interpreter = ["bash", "-c"]
   }
 }
