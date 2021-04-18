@@ -5,12 +5,12 @@ variable "aws_region" {
 
 variable "mailgun_api_key" {
   description = "API Key for Mailgun"
-  sensitive = true
+  sensitive   = true
 }
 
 variable "mailgun_domain" {
   description = "Email domain for Mailgun"
-  sensitive = true
+  sensitive   = true
 }
 
 variable "git_commit" {
@@ -19,5 +19,5 @@ variable "git_commit" {
 
 variable "recipients_list" {
   description = "A list of recipients that should receive the update"
-  sensitive = true
+  sensitive   = true
 }
