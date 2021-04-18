@@ -46,7 +46,7 @@ jobs:
         -var "mailgun_api_key=${{ secrets.MAILGUN_API_KEY }}"
         -var "mailgun_domain=${{ secrets.MAILGUN_DOMAIN }}"
         -var "git_commit=${{ github.sha }}"
-        -var "recipients_list=${{ RECIPIENTS_LIST }}"
+        -var "recipients_list=${{ secrets.RECIPIENTS_LIST }}"
 
 
     - name: Terraform Apply
@@ -57,4 +57,4 @@ jobs:
         -var "mailgun_api_key=${{ secrets.MAILGUN_API_KEY }}"
         -var "mailgun_domain=${{ secrets.MAILGUN_DOMAIN }}"
         -var "git_commit=${{ GITHUB_SHA }}"
-        -var "recipients_list=${{ RECIPIENTS_LIST }}"
+        -var "recipients_list=${{ secrets.RECIPIENTS_LIST }}"
