@@ -57,7 +57,7 @@ EOF
 resource "aws_cloudwatch_event_rule" "every_evening" {
   name                = "every-evening"
   description         = "Report York Region COVID news daily"
-  schedule_expression = "cron(0 22 * * ? *)"
+  schedule_expression = "cron(30 21 * * ? *)"
 }
 
 resource "aws_cloudwatch_event_target" "report_daily" {
