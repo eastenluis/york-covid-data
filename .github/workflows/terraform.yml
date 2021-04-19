@@ -42,6 +42,7 @@ jobs:
     - name: Terraform Plan
       run: >
         terraform -chdir="./terraform" plan
+        -lock=false
         -var "aws_region=${{ secrets.AWS_REGION }}"
         -var "mailgun_api_key=${{ secrets.MAILGUN_API_KEY }}"
         -var "mailgun_domain=${{ secrets.MAILGUN_DOMAIN }}"
