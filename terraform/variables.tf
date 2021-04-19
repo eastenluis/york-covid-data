@@ -19,5 +19,6 @@ variable "git_commit" {
 
 variable "recipients_list" {
   description = "A list of recipients that should receive the update"
+  sensitive   = true
   type        = list(string)
 }
